@@ -1,0 +1,2 @@
+# Jackpot
+Jackpot FastCaseOpener/AutoClicker
