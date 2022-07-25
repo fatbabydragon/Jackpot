@@ -1,0 +1,56 @@
+--< Variables >--
+local lp = game:GetService("Players").LocalPlayer
+local hum = lp.Character.Humanoid
+
+local AutoClick = false
+local AutoSell = false
+
+local AutoCase = false
+local CaseAmount = 1
+local CaseToOpen = nil
+local CaseNames = {"Common (250)", "Uncommon (2.5K)", "Rare (25K)", "Godly (45K)", "Epic (100K)", "Emerald (300K)", "Federation (650K)", "Crown (900K)", "Insane (1.25M)", "Mythical (6.5M)", "Dominus (100M)", "Figures (700M)", "Hairs (5T)", "Hair (50T)", "Mask (250T)", "Fedora (1qd)", "Time (10qd)", "Headphones (50qd)", "Shades (250qd)", "DominoCrown (500qd)", "Tix (1qn)", "Teddy (5qn)", "Randoms (25qn)", "Caps (40qn)", "Secret (60qn)", "Winter (125qn)", "Gucci (245qn)", "Space (315qn)", "Face (423qn)", "Void (613qn)", "Tophat (1sx)", "Kings of the Night (50sx)", "Diamond (250sx)", "Mask 2 (250sx)", "Hoods (1sp)", "Buckets (250sp)", "Crown of O's (1.04O)", "Sleek (49.99O)", "Horns2 (250O)"}
+
+--< Get Library >--
+local library = loadstring(game:HttpGet("https://pastebin.com/raw/db4qGmB5"))()
+
+--< Create Window >--
+local window = library:CreateWindow("Jackpot!")
+
+--< Create Tabs >--
+local PlayerTab = window:CreateTab("Player")
+local CheatsTab = window:CreateTab("Cheats")
+local SettingsTab = window:CreateTab("Settings")
+
+--< Player Tab >--
+PlayerTab:CreateSlider("WalkSpeed", hum.WalkSpeed, 100, hum.WalkSpeed, true, function(Val) hum.WalkSpeed = Val end)
+PlayerTab:CreateSlider("JumpPower", hum.JumpPower, 500, hum.JumpPower, true, function(Val) hum.JumpPower = Val end)
+PlayerTab:CreateSlider("HipHeight", hum.HipHeight, 50, hum.HipHeight, false, function(Val) hum.HipHeight = Val end)
+
+--< Cheat Tab >--
+CheatsTab:CreateToggle("Auto-Click", false, function(Val) AutoClick = Val end)
+CheatsTab:CreateToggle("Auto-Sell", false, function(Val) AutoSell = Val end)
+CheatsTab:CreateToggle("Auto-Case", false, function(Val) AutoCase = Val end)
+CheatsTab:CreateSlider("Case Amount", 0, 100000, CaseAmount, true, function(Val) CaseAmount = Val end)
+CheatsTab:CreateDropdown("Case To Open", CaseNames, "None", function(Val) CaseToOpen = Val end)
+
+--< Misc Tab >--
+SettingsTab:CreateKeybind("Toggle Menu", "RightAlt", function() window:ToggleWindow() end)
+
+--< Functions >--
+game:GetService('RunService').Stepped:Connect(function()
+    if AutoClick then
+        game:GetService("ReplicatedStorage").Communication.Click:FireServer()
+    end
+    if AutoSell then
+        firesignal(lp.PlayerGui.UI.Inventory.SellAll.MouseButton1Click) 
+    end
+    if AutoCase and CaseToOpen ~= nil then
+        if CaseToOpen == "Horns2 (250O)" then
+            game:GetService("ReplicatedStorage").Communication.Case:InvokeServer("Horns 2", CaseAmount)
+        elseif CaseToOpen == "Kings of the Night (50sx)" then
+            game:GetService("ReplicatedStorage").Communication.Case:InvokeServer("Kings of the Night", CaseAmount)
+        else
+            game:GetService("ReplicatedStorage").Communication.Case:InvokeServer(CaseToOpen:split(' ')[1], CaseAmount)
+        end
+    end
+end)
